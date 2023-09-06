@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import classes from "./NavBar.module.scss";
 import {
   AiFillCaretDown,
@@ -28,10 +28,26 @@ const Navbar = () => {
   const [searchDropdownVisible, setSearchDropdownVisible] = useState(false);
   const [searchBy, setSearchBy] = useState<SearchOptions>(SearchOptions.All);
 
+  const searchOptionRef = useRef(null);
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+  }, []);
+
+  const handleClickOutside = (e) => {
+    if (!searchOptionRef.current?.contains(e.target)) {
+      // Not sure why but if I put toggleSearchDropDown() here, it does not work
+      setSearchDropdownVisible(false);
+    } else {
+      return;
+    }
+  };
+
   const toggleSearchDropDown = () => {
     setSearchDropdownVisible(!searchDropdownVisible);
   };
 
+  // Capitalizes the first character of a string
   const capitalize = (str: string) => {
     const firstCharacter = str.charAt(0).toUpperCase();
     const firstCharacterRemoved = str.slice(1);
@@ -70,6 +86,7 @@ const Navbar = () => {
               ? classes.inputDropdownVisible
               : classes.inputDropdown
           }
+          ref={searchOptionRef}
         >
           {searchOptions.map((so) => (
             <span
