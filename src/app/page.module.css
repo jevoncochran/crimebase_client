@@ -2,6 +2,10 @@
   padding: 3rem;
 }
 
+.sectionWrapper {
+  margin-bottom: 2rem;
+}
+
 .title {
   color: #f4c518;
   font-size: 28px;
