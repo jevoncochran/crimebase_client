@@ -8,7 +8,7 @@ import {
   AiOutlineSearch,
 } from "react-icons/ai";
 
-enum SearchOptions {
+enum SearchOption {
   All = "all",
   Location = "location",
   Case = "case",
@@ -16,17 +16,17 @@ enum SearchOptions {
   Suspect = "suspect",
 }
 
-const searchOptions: SearchOptions[] = [
-  SearchOptions.All,
-  SearchOptions.Location,
-  SearchOptions.Case,
-  SearchOptions.Victims,
-  SearchOptions.Suspect,
+const searchOptions: SearchOption[] = [
+  SearchOption.All,
+  SearchOption.Location,
+  SearchOption.Case,
+  SearchOption.Victims,
+  SearchOption.Suspect,
 ];
 
 const Navbar = () => {
   const [searchDropdownVisible, setSearchDropdownVisible] = useState(false);
-  const [searchBy, setSearchBy] = useState<SearchOptions>(SearchOptions.All);
+  const [searchBy, setSearchBy] = useState<SearchOption>(SearchOption.All);
 
   const searchOptionRef = useRef(null);
 
@@ -35,6 +35,7 @@ const Navbar = () => {
   }, []);
 
   const handleClickOutside = (e) => {
+    // TODO: Fix this error
     if (!searchOptionRef.current?.contains(e.target)) {
       // Not sure why but if I put toggleSearchDropDown() here, it does not work
       setSearchDropdownVisible(false);
@@ -57,7 +58,7 @@ const Navbar = () => {
     return capitalized;
   };
 
-  const handleSearchBySelect = (selected: SearchOptions) => {
+  const handleSearchBySelect = (selected: SearchOption) => {
     setSearchBy(selected);
     toggleSearchDropDown();
   };
