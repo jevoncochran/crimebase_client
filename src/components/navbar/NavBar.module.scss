@@ -1,0 +1,82 @@
+.container {
+  height: 50px;
+  background-color: #121212;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 150px;
+}
+
+.logo {
+  height: 30px;
+  width: 100px;
+  background-color: #f4c518;
+  border-radius: 4px;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.inputContainer {
+  height: 30px;
+  width: 700px;
+  background-color: #fff;
+  border-radius: 4px;
+  display: flex;
+}
+
+.searchBy {
+  width: 60px;
+  height: 100%;
+  border-right: 1px solid black;
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.inputWrapper {
+  width: 640px;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  height: 100%;
+  width: 610px;
+  outline: none;
+  background-color: #fff;
+  border: none;
+  /* border: 1px dashed red; */
+  border-radius: 4px;
+  padding-left: 10px;
+}
+
+.icon {
+  /* border: 2px solid blue; */
+  color: #757575;
+  height: 80%;
+  width: 30px;
+}
+
+.signInBtn {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 16px;
+}
+
+.languageContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  // border: 1px dashed white;
+
+  span {
+    margin-right: 4px;
+  }
+}
