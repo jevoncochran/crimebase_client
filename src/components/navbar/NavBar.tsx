@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, KeyboardEvent } from "react";
 import classes from "./NavBar.module.scss";
 import {
   AiFillCaretDown,
   AiFillCaretUp,
   AiOutlineSearch,
 } from "react-icons/ai";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 enum SearchOption {
   All = "all",
@@ -27,6 +30,9 @@ const searchOptions: SearchOption[] = [
 const Navbar = () => {
   const [searchDropdownVisible, setSearchDropdownVisible] = useState(false);
   const [searchBy, setSearchBy] = useState<SearchOption>(SearchOption.All);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const router = useRouter();
 
   const searchOptionRef = useRef(null);
 
@@ -63,9 +69,28 @@ const Navbar = () => {
     toggleSearchDropDown();
   };
 
+  const handleSearch = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      console.log("You pressed Enter!");
+      axios
+        .get(
+          `http://localhost:8000/api/cases/search?searchQuery=${searchQuery}`
+        )
+        .then((res) => {
+          console.log(res.data);
+          router.push(`/search?searchQuery=${searchQuery}`);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   return (
     <div className={classes.container}>
-      <div className={classes.logo}>Crimebase</div>
+      <Link href="/">
+        <div className={classes.logo}>Crimebase</div>
+      </Link>
       <div className={classes.inputContainerWrapper}>
         <div className={classes.inputContainer}>
           <div className={classes.searchBy} onClick={toggleSearchDropDown}>
@@ -77,6 +102,9 @@ const Navbar = () => {
               type="text"
               placeholder="Search Crimebase..."
               className={classes.searchInput}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => handleSearch(e)}
             />
             <AiOutlineSearch className={classes.icon} size={25} />
           </div>
