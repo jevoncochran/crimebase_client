@@ -10,27 +10,24 @@ import {
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { SearchFilter } from "@/types";
+import { setSearchOptions } from "@/redux/features/searchSlice";
+import { useAppDispatch } from "@/redux/hooks";
 
-enum SearchOption {
-  All = "all",
-  Location = "location",
-  Case = "case",
-  Victims = "victims",
-  Suspect = "suspect",
-}
-
-const searchOptions: SearchOption[] = [
-  SearchOption.All,
-  SearchOption.Location,
-  SearchOption.Case,
-  SearchOption.Victims,
-  SearchOption.Suspect,
+const searchOptions: SearchFilter[] = [
+  SearchFilter.All,
+  SearchFilter.Location,
+  SearchFilter.Case,
+  SearchFilter.Victims,
+  SearchFilter.Suspect,
 ];
 
 const Navbar = () => {
   const [searchDropdownVisible, setSearchDropdownVisible] = useState(false);
-  const [searchBy, setSearchBy] = useState<SearchOption>(SearchOption.All);
+  const [searchBy, setSearchBy] = useState<SearchFilter>(SearchFilter.All);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
 
@@ -64,7 +61,7 @@ const Navbar = () => {
     return capitalized;
   };
 
-  const handleSearchBySelect = (selected: SearchOption) => {
+  const handleSearchBySelect = (selected: SearchFilter) => {
     setSearchBy(selected);
     toggleSearchDropDown();
   };
@@ -78,6 +75,7 @@ const Navbar = () => {
         )
         .then((res) => {
           console.log(res.data);
+          dispatch(setSearchOptions({ searchFilter: "all", searchQuery }));
           router.push(`/search?searchQuery=${searchQuery}`);
         })
         .catch((err) => {

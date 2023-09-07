@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import classes from "./page.module.css";
 import axios from "axios";
 import Image from "next/image";
-import { Case } from "./types";
+import { Case } from "../types";
 
 export default function Home() {
   const [buzzingCases, setBuzzingCases] = useState<Case[]>([]);

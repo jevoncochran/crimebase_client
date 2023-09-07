@@ -52,3 +52,11 @@ export interface Case {
   suspects?: Suspect[];
   caseTypes: CaseType[];
 }
+
+export enum SearchFilter {
+  All = "all",
+  Location = "location",
+  Case = "case",
+  Victims = "victims",
+  Suspect = "suspect",
+}
