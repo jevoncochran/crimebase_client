@@ -68,19 +68,9 @@ const Navbar = () => {
 
   const handleSearch = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      console.log("You pressed Enter!");
-      axios
-        .get(
-          `http://localhost:8000/api/cases/search?searchQuery=${searchQuery}`
-        )
-        .then((res) => {
-          console.log(res.data);
-          dispatch(setSearchOptions({ searchFilter: "all", searchQuery }));
-          router.push(`/search?searchQuery=${searchQuery}`);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      dispatch(setSearchOptions({ searchFilter: searchBy, searchQuery }));
+      router.push(`/search?filter=${searchBy}&query=${searchQuery}`);
+      setSearchQuery("");
     }
   };
 
