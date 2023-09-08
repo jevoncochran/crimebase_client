@@ -1,32 +1,35 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, KeyboardEvent } from "react";
 import classes from "./NavBar.module.scss";
 import {
   AiFillCaretDown,
   AiFillCaretUp,
   AiOutlineSearch,
 } from "react-icons/ai";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { SearchFilter } from "@/types";
+import { setSearchOptions } from "@/redux/features/searchSlice";
+import { useAppDispatch } from "@/redux/hooks";
 
-enum SearchOption {
-  All = "all",
-  Location = "location",
-  Case = "case",
-  Victims = "victims",
-  Suspect = "suspect",
-}
-
-const searchOptions: SearchOption[] = [
-  SearchOption.All,
-  SearchOption.Location,
-  SearchOption.Case,
-  SearchOption.Victims,
-  SearchOption.Suspect,
+const searchOptions: SearchFilter[] = [
+  SearchFilter.All,
+  SearchFilter.Location,
+  SearchFilter.Case,
+  SearchFilter.Victims,
+  SearchFilter.Suspect,
 ];
 
 const Navbar = () => {
   const [searchDropdownVisible, setSearchDropdownVisible] = useState(false);
-  const [searchBy, setSearchBy] = useState<SearchOption>(SearchOption.All);
+  const [searchBy, setSearchBy] = useState<SearchFilter>(SearchFilter.All);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const dispatch = useAppDispatch();
+
+  const router = useRouter();
 
   const searchOptionRef = useRef(null);
 
@@ -58,14 +61,24 @@ const Navbar = () => {
     return capitalized;
   };
 
-  const handleSearchBySelect = (selected: SearchOption) => {
+  const handleSearchBySelect = (selected: SearchFilter) => {
     setSearchBy(selected);
     toggleSearchDropDown();
   };
 
+  const handleSearch = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      dispatch(setSearchOptions({ searchFilter: searchBy, searchQuery }));
+      router.push(`/search?filter=${searchBy}&query=${searchQuery}`);
+      setSearchQuery("");
+    }
+  };
+
   return (
     <div className={classes.container}>
-      <div className={classes.logo}>Crimebase</div>
+      <Link href="/">
+        <div className={classes.logo}>Crimebase</div>
+      </Link>
       <div className={classes.inputContainerWrapper}>
         <div className={classes.inputContainer}>
           <div className={classes.searchBy} onClick={toggleSearchDropDown}>
@@ -77,6 +90,9 @@ const Navbar = () => {
               type="text"
               placeholder="Search Crimebase..."
               className={classes.searchInput}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => handleSearch(e)}
             />
             <AiOutlineSearch className={classes.icon} size={25} />
           </div>
