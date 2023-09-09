@@ -5,10 +5,21 @@ import classes from "./page.module.css";
 import axios from "axios";
 import Image from "next/image";
 import { Case } from "../types";
+import Carousel from "react-elastic-carousel";
 
 export default function Home() {
   const [buzzingCases, setBuzzingCases] = useState<Case[]>([]);
   const [localCases, setLocalCases] = useState<Case[]>([]);
+
+  const buzzingCasesDoubled = [...buzzingCases, ...buzzingCases];
+  console.log(buzzingCasesDoubled);
+
+  const breakPoints = [
+    { width: 1, itemsToShow: 3 },
+    // { width: 550, itemsToShow: 2, itemsToScroll: 2 },
+    // { width: 768, itemsToShow: 3 },
+    // { width: 1200, itemsToShow: 4 }
+  ];
 
   useEffect(() => {
     const getBuzzingCases = () => {
@@ -41,19 +52,21 @@ export default function Home() {
       <div className={classes.sectionWrapper}>
         <h2 className={classes.title}>In the News</h2>
         <div className={classes.casesContainer}>
-          {buzzingCases.map((caseInfo) => (
-            <div key={caseInfo.id} className={classes.caseCard}>
-              <p className={classes.caseTitle}>{caseInfo.title}</p>
-              {caseInfo.mainImageUrl ? (
-                <Image
-                  src={caseInfo.mainImageUrl}
-                  alt={caseInfo.title}
-                  height={400}
-                  width={400}
-                />
-              ) : null}
-            </div>
-          ))}
+          <Carousel breakPoints={breakPoints}>
+            {buzzingCasesDoubled.map((caseInfo) => (
+              <div key={caseInfo.id} className={classes.caseCard}>
+                <p className={classes.caseTitle}>{caseInfo.title}</p>
+                {caseInfo.mainImageUrl ? (
+                  <Image
+                    src={caseInfo.mainImageUrl}
+                    alt={caseInfo.title}
+                    height={400}
+                    width={400}
+                  />
+                ) : null}
+              </div>
+            ))}
+          </Carousel>
         </div>
       </div>
       <div className={classes.sectionWrapper}>
