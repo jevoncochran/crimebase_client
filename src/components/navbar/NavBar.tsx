@@ -7,7 +7,7 @@ import {
   AiFillCaretUp,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { SearchFilter } from "@/types";
 import { setSearchOptions } from "@/redux/features/searchSlice";
@@ -32,6 +32,8 @@ const Navbar = () => {
   const { data: session } = useSession();
 
   const router = useRouter();
+
+  const page = usePathname();
 
   const searchOptionRef = useRef(null);
 
@@ -75,6 +77,10 @@ const Navbar = () => {
       setSearchQuery("");
     }
   };
+
+  if (page.includes("login")) {
+    return null;
+  }
 
   return (
     <div className={classes.container}>
