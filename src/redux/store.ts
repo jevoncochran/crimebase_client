@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import searchReducer from "./features/searchSlice";
+import caseReducer from "./features/caseSlice";
 
 export const store = configureStore({
-  reducer: { search: searchReducer },
+  reducer: { search: searchReducer, case: caseReducer },
   //   Not sure if I want this
   //   devTools: process.env.NODE_ENV !== "production",
 });

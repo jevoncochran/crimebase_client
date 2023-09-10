@@ -1,13 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import classes from "./page.module.css";
+import classes from "./HomePage.module.scss";
 import axios from "axios";
 import Image from "next/image";
-import { Case } from "../types";
+import { Case } from "../../types";
 import Carousel from "react-elastic-carousel";
+import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/redux/hooks";
+import { setSelectedCase } from "@/redux/features/caseSlice";
 
 export default function Home() {
+  const router = useRouter();
+
+  const dispatch = useAppDispatch();
+
   const [buzzingCases, setBuzzingCases] = useState<Case[]>([]);
   const [localCases, setLocalCases] = useState<Case[]>([]);
 
@@ -20,6 +27,11 @@ export default function Home() {
     // { width: 768, itemsToShow: 3 },
     // { width: 1200, itemsToShow: 4 }
   ];
+
+  const handleCaseSelect = (caseInfo: Case) => {
+    dispatch(setSelectedCase(caseInfo));
+    router.push(`/case/${caseInfo.id}`);
+  };
 
   useEffect(() => {
     const getBuzzingCases = () => {
@@ -47,6 +59,7 @@ export default function Home() {
     getBuzzingCases();
     getLocalCases();
   }, []);
+
   return (
     <main className={classes.main}>
       <div className={classes.sectionWrapper}>
@@ -54,7 +67,11 @@ export default function Home() {
         <div className={classes.casesContainer}>
           <Carousel breakPoints={breakPoints}>
             {buzzingCasesDoubled.map((caseInfo) => (
-              <div key={caseInfo.id} className={classes.caseCard}>
+              <div
+                key={caseInfo.id}
+                className={classes.caseCard}
+                onClick={() => handleCaseSelect(caseInfo)}
+              >
                 <p className={classes.caseTitle}>{caseInfo.title}</p>
                 {caseInfo.mainImageUrl ? (
                   <Image

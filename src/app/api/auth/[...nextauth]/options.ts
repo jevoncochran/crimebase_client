@@ -1,4 +1,4 @@
-import { signJwtToken } from "@/lib/jwt";
+import { signJwtToken } from "@/utils/jwt";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 

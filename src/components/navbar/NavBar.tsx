@@ -13,6 +13,7 @@ import { SearchFilter } from "@/types";
 import { setSearchOptions } from "@/redux/features/searchSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { capitalize } from "@/utils/capitalize";
 
 const searchOptions: SearchFilter[] = [
   SearchFilter.All,
@@ -53,16 +54,6 @@ const Navbar = () => {
 
   const toggleSearchDropDown = () => {
     setSearchDropdownVisible(!searchDropdownVisible);
-  };
-
-  // Capitalizes the first character of a string
-  const capitalize = (str: string) => {
-    const firstCharacter = str.charAt(0).toUpperCase();
-    const firstCharacterRemoved = str.slice(1);
-
-    const capitalized = firstCharacter + firstCharacterRemoved;
-
-    return capitalized;
   };
 
   const handleSearchBySelect = (selected: SearchFilter) => {
