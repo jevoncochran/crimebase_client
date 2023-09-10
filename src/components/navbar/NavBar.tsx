@@ -7,12 +7,12 @@ import {
   AiFillCaretUp,
   AiOutlineSearch,
 } from "react-icons/ai";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { SearchFilter } from "@/types";
 import { setSearchOptions } from "@/redux/features/searchSlice";
 import { useAppDispatch } from "@/redux/hooks";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const searchOptions: SearchFilter[] = [
   SearchFilter.All,
@@ -29,7 +29,11 @@ const Navbar = () => {
 
   const dispatch = useAppDispatch();
 
+  const { data: session } = useSession();
+
   const router = useRouter();
+
+  const page = usePathname();
 
   const searchOptionRef = useRef(null);
 
@@ -73,6 +77,10 @@ const Navbar = () => {
       setSearchQuery("");
     }
   };
+
+  if (page.includes("login") || page.includes("register")) {
+    return null;
+  }
 
   return (
     <div className={classes.container}>
@@ -120,7 +128,16 @@ const Navbar = () => {
           ))}
         </div>
       </div>
-      <button className={classes.signInBtn}>Sign In</button>
+      {session?.user ? (
+        <button className={classes.signInBtn} onClick={() => signOut()}>
+          Sign Out
+        </button>
+      ) : (
+        <button className={classes.signInBtn} onClick={() => signIn()}>
+          Sign In
+        </button>
+      )}
+
       <div className={classes.languageContainer}>
         <span>EN</span>
         <AiFillCaretDown />
