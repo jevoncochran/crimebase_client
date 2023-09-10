@@ -18,8 +18,8 @@
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  cursor: pointer;
   margin-bottom: 1rem;
+  cursor: pointer;
 }
 
 .mainHeader {
@@ -31,6 +31,10 @@
   border-radius: 4px;
   color: #000;
   padding: 1.5rem;
+
+  form {
+    margin-bottom: 2rem;
+  }
 }
 
 .inputWrapper {
@@ -64,4 +68,20 @@
   border: none;
   border-radius: 4px;
   color: #000;
+  cursor: pointer;
+}
+
+.newToCrimebase {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.registerBtn {
+  width: 350px;
+  background-color: transparent;
+  color: #000;
+  height: 30px;
+  border-radius: 4px;
+  border: 0.5px solid grey;
+  cursor: pointer;
 }

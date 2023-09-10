@@ -100,6 +100,10 @@ const LoginPage = () => {
           </div>
           <button className={classes.signInBtn}>Sign in</button>
         </form>
+        <h5 className={classes.newToCrimebase}>New to Crimebase?</h5>
+        <button className={classes.registerBtn}>
+          Create your contributor account
+        </button>
       </div>
     </div>
   );
