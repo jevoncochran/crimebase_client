@@ -1,10 +1,14 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import classes from "./LoginPage.module.scss";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const LoginPage = () => {
+  const router = useRouter();
+
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [inputError, setInputError] = useState({
     emailMissing: false,
@@ -19,32 +23,56 @@ const LoginPage = () => {
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { email, password } = credentials;
 
-    let inputErorCopy = { ...inputError };
+    let inputErrorCopy = { ...inputError };
 
-    if (email === "") {
-      inputErorCopy = { ...inputErorCopy, emailMissing: true };
+    if (!email) {
+      inputErrorCopy = { ...inputErrorCopy, emailMissing: true };
     } else {
-      inputErorCopy = { ...inputErorCopy, emailMissing: false };
+      inputErrorCopy = { ...inputErrorCopy, emailMissing: false };
     }
 
-    if (password === "") {
-      inputErorCopy = { ...inputErorCopy, passwordMissing: true };
+    if (!password) {
+      inputErrorCopy = { ...inputErrorCopy, passwordMissing: true };
     } else {
-      inputErorCopy = { ...inputErorCopy, passwordMissing: false };
+      inputErrorCopy = { ...inputErrorCopy, passwordMissing: false };
     }
 
-    if (password !== "" && password.length < 6) {
-      inputErorCopy = { ...inputErorCopy, passwordMinimum: true };
+    if (password && password.length < 6) {
+      inputErrorCopy = { ...inputErrorCopy, passwordMinimum: true };
     } else {
-      inputErorCopy = { ...inputErorCopy, passwordMinimum: false };
+      inputErrorCopy = { ...inputErrorCopy, passwordMinimum: false };
     }
 
-    setInputError(inputErorCopy);
+    setInputError(inputErrorCopy);
+
+    const noInputError = !Object.values(inputErrorCopy).some(
+      (value) => value === true
+    );
+
+    if (noInputError) {
+      try {
+        const res = await signIn("credentials", {
+          email: credentials.email,
+          password: credentials.password,
+          redirect: false,
+        });
+
+        if (res?.error === null) {
+          setTimeout(() => {
+            router.push("/");
+          }, 1000);
+        } else {
+          console.log("error occurred while logging in");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -62,7 +90,7 @@ const LoginPage = () => {
             <input
               type="text"
               name="email"
-              value={undefined}
+              value={credentials.email}
               onChange={handleChange}
               className={classes.input}
             />
@@ -79,7 +107,7 @@ const LoginPage = () => {
             <input
               type="password"
               name="password"
-              value={undefined}
+              value={credentials.password}
               onChange={handleChange}
               className={classes.input}
             />
@@ -101,7 +129,10 @@ const LoginPage = () => {
           <button className={classes.signInBtn}>Sign in</button>
         </form>
         <h5 className={classes.newToCrimebase}>New to Crimebase?</h5>
-        <button className={classes.registerBtn}>
+        <button
+          className={classes.registerBtn}
+          onClick={() => router.push("/register")}
+        >
           Create your contributor account
         </button>
       </div>

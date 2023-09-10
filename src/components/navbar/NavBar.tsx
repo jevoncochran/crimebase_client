@@ -78,7 +78,7 @@ const Navbar = () => {
     }
   };
 
-  if (page.includes("login")) {
+  if (page.includes("login") || page.includes("register")) {
     return null;
   }
 
